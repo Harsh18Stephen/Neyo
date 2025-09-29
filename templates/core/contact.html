@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - NEYO{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl lg:text-5xl font-bold text-white mb-4">
+            Get in Touch
+        </h1>
+        <p class="text-xl text-gray-200 max-w-2xl mx-auto">
+            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+        </p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            <!-- Contact Info -->
+            <div class="space-y-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-neyo-primary mb-6">
+                        Contact Information
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Reach out to us through any of these channels. We're here to help!
+                    </p>
+                </div>
+                
+                <!-- Contact Methods -->
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-neyo-primary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-map-marker-alt text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-neyo-primary">Address</h3>
+                            <p class="text-gray-600">123 Commerce Street, Business District, City 12345</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-neyo-secondary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-phone text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-neyo-primary">Phone</h3>
+                            <p class="text-gray-600">+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-neyo-accent rounded-lg flex items-center justify-center">
+                            <i class="fas fa-envelope text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-neyo-primary">Email</h3>
+                            <p class="text-gray-600">contact@neyo.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-clock text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-neyo-primary">Business Hours</h3>
+                            <p class="text-gray-600">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                            <p class="text-gray-600">Sat - Sun: 10:00 AM - 4:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="pt-8">
+                    <h3 class="text-lg font-semibold text-neyo-primary mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center text-white hover:bg-blue-500 transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white hover:bg-pink-600 transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-blue-800 rounded-full flex items-center justify-center text-white hover:bg-blue-900 transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-neyo-primary mb-6">
+                    Send us a Message
+                </h2>
+                
+                <form method="post" class="space-y-6" x-data="{ submitting: false }">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                                Name *
+                            </label>
+                            <input type="text" 
+                                   id="name" 
+                                   name="name" 
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                Email *
+                            </label>
+                            <input type="email" 
+                                   id="email" 
+                                   name="email" 
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent transition-colors">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">
+                            Subject *
+                        </label>
+                        <input type="text" 
+                               id="subject" 
+                               name="subject" 
+                               required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+                            Message *
+                        </label>
+                        <textarea id="message" 
+                                  name="message" 
+                                  rows="5" 
+                                  required
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent transition-colors"
+                                  placeholder="Tell us how we can help you..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" 
+                                :disabled="submitting"
+                                @click="submitting = true"
+                                class="w-full bg-neyo-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-neyo-primary focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span x-show="!submitting">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                Send Message
+                            </span>
+                            <span x-show="submitting">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>
+                                Sending...
+                            </span>
+                        </button>
+                    </div>
+                    
+                    <p class="text-sm text-gray-500 text-center">
+                        We'll get back to you within 24 hours.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-neyo-primary mb-4">
+                Frequently Asked Questions
+            </h2>
+            <p class="text-lg text-gray-600">
+                Quick answers to common questions
+            </p>
+        </div>
+        
+        <div class="space-y-6" x-data="{ openFaq: null }">
+            <!-- FAQ 1 -->
+            <div class="border border-gray-200 rounded-lg">
+                <button @click="openFaq = openFaq === 1 ? null : 1" 
+                        class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <span class="font-semibold text-neyo-primary">What are your shipping options?</span>
+                    <i class="fas fa-chevron-down transform transition-transform" 
+                       :class="{ 'rotate-180': openFaq === 1 }"></i>
+                </button>
+                <div x-show="openFaq === 1" x-transition class="px-6 pb-4">
+                    <p class="text-gray-600">We offer free standard shipping on orders over $50. Express shipping is available for an additional fee. Most orders are processed within 1-2 business days.</p>
+                </div>
+            </div>
+            
+            <!-- FAQ 2 -->
+            <div class="border border-gray-200 rounded-lg">
+                <button @click="openFaq = openFaq === 2 ? null : 2" 
+                        class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <span class="font-semibold text-neyo-primary">What is your return policy?</span>
+                    <i class="fas fa-chevron-down transform transition-transform" 
+                       :class="{ 'rotate-180': openFaq === 2 }"></i>
+                </button>
+                <div x-show="openFaq === 2" x-transition class="px-6 pb-4">
+                    <p class="text-gray-600">We accept returns within 30 days of purchase for a full refund. Items must be in original condition with tags attached. Return shipping is free for defective items.</p>
+                </div>
+            </div>
+            
+            <!-- FAQ 3 -->
+            <div class="border border-gray-200 rounded-lg">
+                <button @click="openFaq = openFaq === 3 ? null : 3" 
+                        class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <span class="font-semibold text-neyo-primary">Do you offer international shipping?</span>
+                    <i class="fas fa-chevron-down transform transition-transform" 
+                       :class="{ 'rotate-180': openFaq === 3 }"></i>
+                </button>
+                <div x-show="openFaq === 3" x-transition class="px-6 pb-4">
+                    <p class="text-gray-600">Currently, we ship within the United States only. We're working on expanding to international markets soon. Sign up for our newsletter to be notified when international shipping becomes available.</p>
+                </div>
+            </div>
+            
+            <!-- FAQ 4 -->
+            <div class="border border-gray-200 rounded-lg">
+                <button @click="openFaq = openFaq === 4 ? null : 4" 
+                        class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <span class="font-semibold text-neyo-primary">How can I track my order?</span>
+                    <i class="fas fa-chevron-down transform transition-transform" 
+                       :class="{ 'rotate-180': openFaq === 4 }"></i>
+                </button>
+                <div x-show="openFaq === 4" x-transition class="px-6 pb-4">
+                    <p class="text-gray-600">Once your order ships, you'll receive an email with tracking information. You can also check your order status by logging into your account and viewing your order history.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

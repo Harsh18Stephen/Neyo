@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block title %}NEYO - Modern E-commerce Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-neyo-primary via-gray-800 to-neyo-primary overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+        <div class="text-center">
+            <!-- Animated Logo -->
+            <div class="mb-8">
+                <h1 class="text-6xl lg:text-8xl font-bold text-white mb-4 animate-float">
+                    NEYO
+                </h1>
+                <div class="w-24 h-1 bg-neyo-secondary mx-auto rounded-full"></div>
+            </div>
+            
+            <!-- Hero Text -->
+            <p class="text-xl lg:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Discover premium products crafted for the modern lifestyle. 
+                Experience seamless shopping with cutting-edge design.
+            </p>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'products:list' %}" 
+                   class="bg-neyo-secondary hover:bg-yellow-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-shopping-bag mr-2"></i>
+                    Shop Now
+                </a>
+                <a href="#featured" 
+                   class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-neyo-primary font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300">
+                    <i class="fas fa-star mr-2"></i>
+                    Featured Products
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating Elements -->
+    <div class="absolute top-20 left-10 w-20 h-20 bg-neyo-secondary rounded-full opacity-20 animate-float"></div>
+    <div class="absolute top-40 right-20 w-16 h-16 bg-blue-500 rounded-full opacity-20 animate-float" style="animation-delay: 1s;"></div>
+    <div class="absolute bottom-20 left-20 w-12 h-12 bg-green-500 rounded-full opacity-20 animate-float" style="animation-delay: 2s;"></div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl lg:text-4xl font-bold text-neyo-primary mb-4">
+                Why Choose NEYO?
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Experience the difference with our commitment to quality, service, and innovation.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="text-center group">
+                <div class="w-20 h-20 bg-neyo-accent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-shipping-fast text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-neyo-primary mb-3">Fast Shipping</h3>
+                <p class="text-gray-600">Free shipping on orders over $50. Express delivery available nationwide.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="text-center group">
+                <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-shield-alt text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-neyo-primary mb-3">Secure Shopping</h3>
+                <p class="text-gray-600">Your data is protected with enterprise-grade security and encryption.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="text-center group">
+                <div class="w-20 h-20 bg-neyo-secondary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-headset text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-neyo-primary mb-3">24/7 Support</h3>
+                <p class="text-gray-600">Our dedicated support team is always here to help you with any questions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section id="featured" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl lg:text-4xl font-bold text-neyo-primary mb-4">
+                Featured Products
+            </h2>
+            <p class="text-lg text-gray-600">
+                Discover our most popular and trending items
+            </p>
+        </div>
+        
+        {% if featured_products %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for product in featured_products %}
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
+                <div class="aspect-w-1 aspect-h-1 overflow-hidden">
+                    {% if product.get_main_image %}
+                        <img src="{{ product.get_main_image.url }}" alt="{{ product.name }}" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                    {% else %}
+                        <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-400 text-4xl"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-neyo-primary mb-2">{{ product.name }}</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">{{ product.description|truncatewords:15 }}</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl font-bold text-neyo-secondary">${{ product.price }}</span>
+                        <a href="{% url 'products:detail' product.slug %}" 
+                           class="bg-neyo-primary text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- No Products Placeholder -->
+        <div class="text-center py-12">
+            <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-box-open text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-600 mb-3">Coming Soon</h3>
+            <p class="text-gray-500">We're preparing amazing products for you!</p>
+        </div>
+        {% endif %}
+        
+        <!-- View All Products Button -->
+        <div class="text-center mt-12">
+            <a href="{% url 'products:list' %}" 
+               class="bg-neyo-primary text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-800 transition-colors">
+                View All Products
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-16 bg-neyo-primary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-4xl font-bold text-neyo-secondary mb-2">10K+</div>
+                <div class="text-gray-300">Happy Customers</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-neyo-secondary mb-2">500+</div>
+                <div class="text-gray-300">Products</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-neyo-secondary mb-2">50+</div>
+                <div class="text-gray-300">Cities</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-neyo-secondary mb-2">99%</div>
+                <div class="text-gray-300">Satisfaction</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="py-16 bg-gradient-to-r from-neyo-accent to-blue-600">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="text-white">
+            <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>
+            <p class="text-xl mb-8 opacity-90">Get the latest updates on new products and exclusive offers</p>
+            
+            <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input type="email" placeholder="Enter your email" 
+                       class="flex-1 px-4 py-3 rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-white">
+                <button type="submit" 
+                        class="bg-neyo-secondary hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    Subscribe
+                </button>
+            </form>
+            
+            <p class="text-sm opacity-75 mt-4">
+                We respect your privacy. Unsubscribe at any time.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Scroll to Top Button -->
+<button id="scrollToTop" 
+        class="fixed bottom-6 right-6 bg-neyo-primary text-white w-12 h-12 rounded-full shadow-lg hover:bg-gray-800 transition-all duration-300 opacity-0 pointer-events-none"
+        onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+// Show/hide scroll to top button
+window.addEventListener('scroll', function() {
+    const button = document.getElementById('scrollToTop');
+    if (window.scrollY > 300) {
+        button.classList.remove('opacity-0', 'pointer-events-none');
+        button.classList.add('opacity-100');
+    } else {
+        button.classList.add('opacity-0', 'pointer-events-none');
+        button.classList.remove('opacity-100');
+    }
+});
+
+// Add smooth scrolling animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in-up');
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('section').forEach(section => {
+    observer.observe(section);
+});
+</script>
+
+<style>
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}
