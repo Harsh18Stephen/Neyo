@@ -9,5 +9,5 @@ urlpatterns = [
     path('update/<int:item_id>/', views.update_cart, name='update'),
     path('remove/<int:item_id>/', views.remove_from_cart, name='remove'),
     path('clear/', views.clear_cart, name='clear'),
-    path('count/', views.cart_count, name='count'),  
+    path('count/', views.cart_count, name='count'),  # AJAX endpoint
 ]

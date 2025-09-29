@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}Shipping Address - NEYO{% endblock %}
+
+{% block content %}
+<!-- Checkout Header -->
+<section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center text-white">
+            <h1 class="text-3xl font-bold mb-4">Shipping Information</h1>
+            
+            <!-- Progress Steps -->
+            <div class="flex items-center justify-center space-x-4 mt-6">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-check font-bold"></i>
+                    </div>
+                    <span class="ml-2 font-medium">Cart</span>
+                </div>
+                <div class="w-16 h-1 bg-neyo-secondary"></div>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-neyo-secondary rounded-full flex items-center justify-center font-bold">
+                        2
+                    </div>
+                    <span class="ml-2 font-medium">Address</span>
+                </div>
+                <div class="w-16 h-1 bg-gray-400"></div>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center font-bold">
+                        3
+                    </div>
+                    <span class="ml-2 font-medium">Payment</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Address Form -->
+<section class="py-12 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <form method="post" action="{% url 'orders:checkout_address' %}" x-data="{ useSameAddress: true }">
+            {% csrf_token %}
+            
+            <div class="space-y-8">
+                <!-- Shipping Address -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-neyo-primary mb-6">
+                        <i class="fas fa-shipping-fast mr-2"></i>Shipping Address
+                    </h2>
+                    
+                    {% if shipping_addresses %}
+                        <div class="space-y-4">
+                            {% for address in shipping_addresses %}
+                            <label class="block">
+                                <input type="radio" 
+                                       name="shipping_address" 
+                                       value="{{ address.id }}" 
+                                       class="mr-3"
+                                       {% if address.is_default %}checked{% endif %}
+                                       required>
+                                <span class="inline-block border-2 border-gray-300 rounded-lg p-4 hover:border-neyo-primary transition-colors cursor-pointer w-full">
+                                    <div class="font-semibold text-neyo-primary">
+                                        {{ address.get_full_name }}
+                                        {% if address.is_default %}
+                                            <span class="ml-2 text-xs bg-neyo-secondary text-white px-2 py-1 rounded">Default</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-gray-600 text-sm mt-1">
+                                        {{ address.address_line_1 }}<br>
+                                        {% if address.address_line_2 %}{{ address.address_line_2 }}<br>{% endif %}
+                                        {{ address.city }}, {{ address.state }} {{ address.postal_code }}
+                                    </div>
+                                </span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
+                            <p class="text-yellow-800">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                No saved addresses found. Please add a shipping address in your profile.
+                            </p>
+                        </div>
+                    {% endif %}
+                    
+                    <a href="{% url 'accounts:profile' %}" 
+                       class="inline-block mt-4 text-neyo-accent hover:underline">
+                        <i class="fas fa-plus-circle mr-1"></i>Add New Address
+                    </a>
+                </div>
+                
+                <!-- Use Same Address Checkbox -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" 
+                               name="use_same_address"
+                               x-model="useSameAddress"
+                               class="w-5 h-5 text-neyo-primary rounded">
+                        <span class="ml-3 font-semibold text-gray-700">
+                            Use shipping address as billing address
+                        </span>
+                    </label>
+                </div>
+                
+                <!-- Billing Address -->
+                <div x-show="!useSameAddress" x-transition class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-neyo-primary mb-6">
+                        <i class="fas fa-file-invoice mr-2"></i>Billing Address
+                    </h2>
+                    
+                    {% if billing_addresses %}
+                        <div class="space-y-4">
+                            {% for address in billing_addresses %}
+                            <label class="block">
+                                <input type="radio" 
+                                       name="billing_address" 
+                                       value="{{ address.id }}" 
+                                       class="mr-3"
+                                       {% if address.is_default %}checked{% endif %}>
+                                <span class="inline-block border-2 border-gray-300 rounded-lg p-4 hover:border-neyo-primary transition-colors cursor-pointer w-full">
+                                    <div class="font-semibold text-neyo-primary">
+                                        {{ address.get_full_name }}
+                                        {% if address.is_default %}
+                                            <span class="ml-2 text-xs bg-neyo-secondary text-white px-2 py-1 rounded">Default</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-gray-600 text-sm mt-1">
+                                        {{ address.address_line_1 }}<br>
+                                        {% if address.address_line_2 %}{{ address.address_line_2 }}<br>{% endif %}
+                                        {{ address.city }}, {{ address.state }} {{ address.postal_code }}
+                                    </div>
+                                </span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
+                            <p class="text-yellow-800">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                No saved billing addresses found.
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex gap-4">
+                    <a href="{% url 'orders:checkout' %}" 
+                       class="flex-1 bg-white border-2 border-neyo-primary text-neyo-primary py-3 px-6 rounded-lg font-semibold text-center hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i>Back
+                    </a>
+                    
+                    <button type="submit" 
+                            class="flex-1 bg-neyo-secondary text-white py-3 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                        Continue to Payment
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

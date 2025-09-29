@@ -31,6 +31,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
     path('payments/', include('payments.urls')),
+    
 ]
 
 # Serve media and static files during development
