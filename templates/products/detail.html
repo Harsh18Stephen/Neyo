@@ -2,49 +2,29 @@
 
 {% block title %}{{ product.name }} - NEYO{% endblock %}
 
-{% block extra_css %}
-<style>
-    .product-gradient {
-        background: linear-gradient(135deg, #f8f1f4 0%, #ffffff 50%, #f8f1f4 100%);
-    }
-    
-    .image-gradient-overlay {
-        background: linear-gradient(135deg, rgba(160,97,106,0.1), rgba(139,77,86,0.05));
-    }
-    
-    .add-to-cart-gradient {
-        background: linear-gradient(135deg, #a0616a, #8b4d56);
-    }
-    
-    .add-to-cart-gradient:hover {
-        box-shadow: 0 5px 15px rgba(160,97,106,0.3);
-    }
-    
-    .feature-badge {
-        background: linear-gradient(135deg, #a0616a, #8b4d56);
-    }
-    
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .animate-fadeInUp {
-        animation: fadeInUp 0.8s ease-out;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<!-- Product Detail Section -->
-<section class="py-12 product-gradient">
+<!-- Breadcrumbs -->
+<section class="bg-white py-4 border-b">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 animate-fadeInUp">
+        <nav class="flex items-center space-x-2 text-sm text-gray-600">
+            <a href="{% url 'core:home' %}" class="hover:text-neyo-primary">Home</a>
+            <i class="fas fa-chevron-right text-xs"></i>
+            <a href="{% url 'products:list' %}" class="hover:text-neyo-primary">Products</a>
+            <i class="fas fa-chevron-right text-xs"></i>
+            <span class="text-neyo-primary font-medium">{{ product.name }}</span>
+        </nav>
+    </div>
+</section>
+
+<!-- Product Detail Section -->
+<section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
             
             <!-- Product Images Gallery -->
             <div class="space-y-4" x-data="{ activeImage: 0 }">
                 <!-- Main Image -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden" style="box-shadow: 0 4px 15px rgba(160,97,106,0.15);">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     {% if images %}
                         {% for image in images %}
                         <img x-show="activeImage === {{ forloop.counter0 }}" 
@@ -53,8 +33,8 @@
                              class="w-full h-96 lg:h-[600px] object-cover">
                         {% endfor %}
                     {% else %}
-                        <div class="w-full h-96 lg:h-[600px] image-gradient-overlay flex items-center justify-center">
-                            <i class="fas fa-image text-[#a0616a] text-6xl"></i>
+                        <div class="w-full h-96 lg:h-[600px] bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-400 text-6xl"></i>
                         </div>
                     {% endif %}
                 </div>
@@ -64,8 +44,8 @@
                 <div class="grid grid-cols-4 gap-4">
                     {% for image in images %}
                     <button @click="activeImage = {{ forloop.counter0 }}" 
-                            class="border-2 rounded-lg overflow-hidden transition-all duration-300"
-                            :class="activeImage === {{ forloop.counter0 }} ? 'border-[#8b4d56] shadow-md' : 'border-gray-200 hover:border-[#a0616a]'">
+                            class="border-2 rounded-lg overflow-hidden transition-all"
+                            :class="activeImage === {{ forloop.counter0 }} ? 'border-neyo-primary' : 'border-gray-200 hover:border-gray-400'">
                         <img src="{{ image.image.url }}" 
                              alt="{{ image.alt_text|default:product.name }}"
                              class="w-full h-24 object-cover">
@@ -80,17 +60,17 @@
                 <!-- Product Title and Price -->
                 <div>
                     {% if product.is_featured %}
-                    <span class="inline-block feature-badge text-white text-xs font-bold px-3 py-1 rounded-full mb-3 shadow-lg">
+                    <span class="inline-block bg-neyo-secondary text-white text-xs font-bold px-3 py-1 rounded mb-3">
                         <i class="fas fa-star mr-1"></i> FEATURED
                     </span>
                     {% endif %}
                     
-                    <h1 class="text-3xl lg:text-4xl font-bold text-[#8b4d56] mb-4">
+                    <h1 class="text-3xl lg:text-4xl font-bold text-neyo-primary mb-4">
                         {{ product.name }}
                     </h1>
                     
                     <div class="flex items-baseline space-x-4 mb-6">
-                        <span class="text-4xl font-bold text-[#a0616a]">
+                        <span class="text-4xl font-bold text-neyo-secondary">
                             ${{ product.price }}
                         </span>
                         {% if not product.is_in_stock %}
@@ -110,30 +90,29 @@
                 </div>
                 
                 <!-- Product Description -->
-                <div class="bg-[#f8f1f4] p-6 rounded-2xl">
-                    <h3 class="text-lg font-semibold text-[#8b4d56] mb-3">Description</h3>
+                <div class="prose prose-sm max-w-none">
+                    <h3 class="text-lg font-semibold text-neyo-primary mb-2">Description</h3>
                     <p class="text-gray-600 leading-relaxed">{{ product.description }}</p>
                 </div>
                 
                 <!-- Add to Cart Form -->
                 {% if product.is_in_stock %}
-                <form method="post" action="{% url 'cart:add' %}" class="space-y-6 bg-white p-6 rounded-2xl shadow-md" style="box-shadow: 0 4px 15px rgba(160,97,106,0.1);" x-data="{ selectedSize: '', quantity: 1 }">
+                <form method="post" action="{% url 'cart:add' %}" class="space-y-6 bg-white p-6 rounded-lg shadow-md" x-data="{ selectedSize: '', quantity: 1 }">
                     {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ product.id }}">
                     
                     <!-- Size Selection -->
                     {% if variants %}
                     <div>
-                        <label class="block text-sm font-semibold text-[#8b4d56] mb-3">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">
                             Select Size *
                         </label>
                         <div class="grid grid-cols-3 gap-3">
                             {% for variant in variants %}
                             <button type="button"
                                     @click="selectedSize = '{{ variant.size }}'"
-                                    :class="selectedSize === '{{ variant.size }}' ? 'bg-[#8b4d56] text-white' : 'bg-white text-gray-700 hover:bg-[#f8f1f4]'"
-                                    class="py-3 px-4 border-2 rounded-lg font-semibold transition-all duration-300"
-                                    style="border-color: #e8d5d9;"
+                                    :class="selectedSize === '{{ variant.size }}' ? 'bg-neyo-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+                                    class="py-3 px-4 border-2 rounded-lg font-semibold transition-all"
                                     {% if not variant.is_in_stock %}disabled{% endif %}
                                     :disabled="!{{ variant.is_in_stock|yesno:'true,false' }}">
                                 {{ variant.size }}
@@ -149,26 +128,25 @@
                     
                     <!-- Quantity Selection -->
                     <div>
-                        <label class="block text-sm font-semibold text-[#8b4d56] mb-3">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">
                             Quantity
                         </label>
                         <div class="flex items-center space-x-4">
                             <button type="button" 
                                     @click="quantity = Math.max(1, quantity - 1)"
-                                    class="w-12 h-12 bg-[#f8f1f4] rounded-lg hover:bg-[#e8d5d9] transition-colors">
-                                <i class="fas fa-minus text-[#8b4d56]"></i>
+                                    class="w-12 h-12 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
+                                <i class="fas fa-minus"></i>
                             </button>
                             <input type="number" 
                                    name="quantity"
                                    x-model="quantity"
                                    min="1" 
                                    max="{{ product.stock }}"
-                                   class="w-20 text-center text-lg font-semibold border-2 rounded-lg py-2"
-                                   style="border-color: #e8d5d9;">
+                                   class="w-20 text-center text-lg font-semibold border-2 border-gray-300 rounded-lg py-2">
                             <button type="button" 
                                     @click="quantity = Math.min({{ product.stock }}, quantity + 1)"
-                                    class="w-12 h-12 bg-[#f8f1f4] rounded-lg hover:bg-[#e8d5d9] transition-colors">
-                                <i class="fas fa-plus text-[#8b4d56]"></i>
+                                    class="w-12 h-12 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
+                                <i class="fas fa-plus"></i>
                             </button>
                         </div>
                     </div>
@@ -176,21 +154,22 @@
                     <!-- Action Buttons -->
                     <div class="space-y-3">
                         <button type="submit" 
-                                class="w-full add-to-cart-gradient text-white py-4 px-6 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg">
+                                {% if variants %}:disabled="!selectedSize"{% endif %}
+                                class="w-full bg-neyo-primary text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                             <i class="fas fa-shopping-cart mr-2"></i>
                             Add to Cart
                         </button>
                         
-                        <button type="button" 
-                                class="w-full bg-white border-2 text-[#8b4d56] py-4 px-6 rounded-2xl font-semibold hover:bg-[#f8f1f4] transition-colors"
-                                style="border-color: #8b4d56;">
-                            <i class="fas fa-heart mr-2"></i>
-                            Add to Wishlist
-                        </button>
+                        {% if variants %}
+                        <p class="text-sm text-gray-500 text-center" x-show="!selectedSize">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Please select a size to continue
+                        </p>
+                        {% endif %}
                     </div>
                 </form>
                 {% else %}
-                <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-6 text-center">
+                <div class="bg-red-50 border-2 border-red-200 rounded-lg p-6 text-center">
                     <i class="fas fa-times-circle text-red-500 text-4xl mb-3"></i>
                     <h3 class="text-xl font-semibold text-red-700 mb-2">Out of Stock</h3>
                     <p class="text-red-600">This product is currently unavailable. Check back soon!</p>
@@ -198,43 +177,43 @@
                 {% endif %}
                 
                 <!-- Product Features -->
-                <div class="grid grid-cols-2 gap-4 pt-6 border-t" style="border-color: #e8d5d9;">
+                <div class="grid grid-cols-2 gap-4 pt-6 border-t">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-[#f8f1f4] rounded-full flex items-center justify-center">
-                            <i class="fas fa-shipping-fast text-[#a0616a]"></i>
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-shipping-fast text-blue-600"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-semibold text-[#8b4d56]">Fast Delivery</p>
+                            <p class="text-sm font-semibold text-gray-800">Fast Delivery</p>
                             <p class="text-xs text-gray-500">2-5 business days</p>
                         </div>
                     </div>
                     
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-[#f8f1f4] rounded-full flex items-center justify-center">
-                            <i class="fas fa-shield-alt text-[#a0616a]"></i>
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-green-600"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-semibold text-[#8b4d56]">Secure Payment</p>
+                            <p class="text-sm font-semibold text-gray-800">Secure Payment</p>
                             <p class="text-xs text-gray-500">100% protected</p>
                         </div>
                     </div>
                     
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-[#f8f1f4] rounded-full flex items-center justify-center">
-                            <i class="fas fa-undo text-[#a0616a]"></i>
+                        <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-undo text-yellow-600"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-semibold text-[#8b4d56]">Easy Returns</p>
+                            <p class="text-sm font-semibold text-gray-800">Easy Returns</p>
                             <p class="text-xs text-gray-500">30-day return</p>
                         </div>
                     </div>
                     
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-[#f8f1f4] rounded-full flex items-center justify-center">
-                            <i class="fas fa-headset text-[#a0616a]"></i>
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-headset text-purple-600"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-semibold text-[#8b4d56]">24/7 Support</p>
+                            <p class="text-sm font-semibold text-gray-800">24/7 Support</p>
                             <p class="text-xs text-gray-500">Always here to help</p>
                         </div>
                     </div>
@@ -246,35 +225,35 @@
 
 <!-- Related Products -->
 {% if related_products %}
-<section class="py-16 bg-white">
+<section class="py-12 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-[#8b4d56] mb-8 text-center">You May Also Like</h2>
+        <h2 class="text-3xl font-bold text-neyo-primary mb-8">Related Products</h2>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for related in related_products %}
-            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group hover:-translate-y-2" style="box-shadow: 0 4px 15px rgba(160,97,106,0.1);">
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
                 <a href="{% url 'products:detail' related.slug %}" class="block relative overflow-hidden">
                     {% if related.get_main_image %}
                         <img src="{{ related.get_main_image.url }}" 
                              alt="{{ related.name }}" 
                              class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
                     {% else %}
-                        <div class="w-full h-64 image-gradient-overlay flex items-center justify-center">
-                            <i class="fas fa-image text-[#a0616a] text-4xl"></i>
+                        <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-400 text-4xl"></i>
                         </div>
                     {% endif %}
                 </a>
                 
-                <div class="p-5">
+                <div class="p-4">
                     <a href="{% url 'products:detail' related.slug %}">
-                        <h3 class="text-lg font-semibold text-[#8b4d56] mb-2 hover:text-[#a0616a] transition-colors">
+                        <h3 class="text-lg font-semibold text-neyo-primary mb-2 hover:text-neyo-secondary transition-colors">
                             {{ related.name }}
                         </h3>
                     </a>
                     <div class="flex items-center justify-between">
-                        <span class="text-xl font-bold text-[#a0616a]">${{ related.price }}</span>
+                        <span class="text-xl font-bold text-neyo-secondary">${{ related.price }}</span>
                         <a href="{% url 'products:detail' related.slug %}" 
-                           class="text-[#8b4d56] hover:text-[#a0616a] transition-colors font-medium">
+                           class="text-neyo-primary hover:text-neyo-secondary transition-colors">
                             View <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
