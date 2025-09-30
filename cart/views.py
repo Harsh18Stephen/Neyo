@@ -10,7 +10,6 @@ from .models import Cart, CartItem
 # Create your views here.
 
 def get_or_create_cart(request):
-    """Get or create cart for user or session"""
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
     else:
@@ -22,16 +21,14 @@ def get_or_create_cart(request):
     return cart
 
 def cart_view(request):
-    """Display shopping cart"""
     cart = get_or_create_cart(request)
     cart_items = cart.items.select_related('product', 'variant')
     
-    # Calculate totals (using Decimal to avoid type errors)
     from decimal import Decimal
     
     subtotal = cart.get_total_price()
-    tax = subtotal * Decimal('0.10')  # 10% tax as Decimal
-    shipping = Decimal('0') if subtotal > 50 else Decimal('5.99')  # Free shipping over $50
+    tax = subtotal * Decimal('0.10')  # 10% tax 
+    shipping = Decimal('0') if subtotal > 50 else Decimal('5.99')  
     total = subtotal + tax + shipping
     
     context = {
@@ -47,20 +44,17 @@ def cart_view(request):
 
 @require_POST
 def add_to_cart(request):
-    """Add product to cart"""
     try:
         product_id = request.POST.get('product_id')
         size = request.POST.get('size', '')
         quantity = int(request.POST.get('quantity', 1))
         
-        # Validate inputs
         if not product_id:
             messages.error(request, 'Product not specified')
             return redirect('products:list')
         
         product = get_object_or_404(Product, id=product_id, is_active=True)
         
-        # Check if product requires size
         variant = None
         if size:
             try:
@@ -72,10 +66,8 @@ def add_to_cart(request):
                 messages.error(request, 'Invalid size selected')
                 return redirect('products:detail', slug=product.slug)
         
-        # Get or create cart
         cart = get_or_create_cart(request)
         
-        # Check if item already exists in cart
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart,
             product=product,
@@ -84,14 +76,12 @@ def add_to_cart(request):
         )
         
         if not created:
-            # Update quantity if item already exists
             cart_item.quantity += quantity
             cart_item.save()
             messages.success(request, f'Updated {product.name} quantity in cart')
         else:
             messages.success(request, f'Added {product.name} to cart')
         
-        # Check if AJAX request
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({
                 'success': True,
@@ -107,7 +97,6 @@ def add_to_cart(request):
 
 @require_POST
 def update_cart(request, item_id):
-    """Update cart item quantity"""
     try:
         quantity = int(request.POST.get('quantity', 1))
         cart = get_or_create_cart(request)
@@ -121,7 +110,6 @@ def update_cart(request, item_id):
             cart_item.save()
             messages.success(request, 'Cart updated')
         
-        # Check if AJAX request
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({
                 'success': True,
@@ -145,7 +133,6 @@ def remove_from_cart(request, item_id):
         
         messages.success(request, f'Removed {product_name} from cart')
         
-        # Check if AJAX request
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({
                 'success': True,
@@ -160,14 +147,12 @@ def remove_from_cart(request, item_id):
         return redirect('cart:view')
 
 def clear_cart(request):
-    """Clear entire cart"""
     cart = get_or_create_cart(request)
     cart.clear()
     messages.success(request, 'Cart cleared')
     return redirect('cart:view')
 
 def cart_count(request):
-    """AJAX endpoint to get cart count"""
     cart = get_or_create_cart(request)
     return JsonResponse({
         'count': cart.get_total_items()

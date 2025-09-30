@@ -2,9 +2,26 @@
 
 {% block title %}Shipping Address - NEYO{% endblock %}
 
+{% block extra_css %}
+<style>
+    .checkout-gradient {
+        background: linear-gradient(135deg, #a0616a, #8b4d56);
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fadeInUp {
+        animation: fadeInUp 0.8s ease-out;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Checkout Header -->
-<section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-8">
+<section class="checkout-gradient py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
             <h1 class="text-3xl font-bold mb-4">Shipping Information</h1>
@@ -12,21 +29,21 @@
             <!-- Progress Steps -->
             <div class="flex items-center justify-center space-x-4 mt-6">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
                         <i class="fas fa-check font-bold"></i>
                     </div>
                     <span class="ml-2 font-medium">Cart</span>
                 </div>
-                <div class="w-16 h-1 bg-neyo-secondary"></div>
+                <div class="w-16 h-1 bg-white"></div>
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-neyo-secondary rounded-full flex items-center justify-center font-bold">
+                    <div class="w-10 h-10 bg-white text-[#8b4d56] rounded-full flex items-center justify-center font-bold shadow-lg">
                         2
                     </div>
                     <span class="ml-2 font-medium">Address</span>
                 </div>
-                <div class="w-16 h-1 bg-gray-400"></div>
+                <div class="w-16 h-1 bg-white/30"></div>
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center font-bold">
+                    <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center font-bold">
                         3
                     </div>
                     <span class="ml-2 font-medium">Payment</span>
@@ -37,15 +54,15 @@
 </section>
 
 <!-- Address Form -->
-<section class="py-12 bg-gray-50">
+<section class="py-12" style="background: linear-gradient(135deg, #f8f1f4 0%, #ffffff 50%, #f8f1f4 100%);">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <form method="post" action="{% url 'orders:checkout_address' %}" x-data="{ useSameAddress: true }">
+        <form method="post" action="{% url 'orders:checkout_address' %}" x-data="{ useSameAddress: true }" class="animate-fadeInUp">
             {% csrf_token %}
             
             <div class="space-y-8">
                 <!-- Shipping Address -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-neyo-primary mb-6">
+                <div class="bg-white rounded-2xl shadow-lg p-6" style="box-shadow: 0 4px 15px rgba(160,97,106,0.15);">
+                    <h2 class="text-2xl font-bold text-[#8b4d56] mb-6">
                         <i class="fas fa-shipping-fast mr-2"></i>Shipping Address
                     </h2>
                     
@@ -59,11 +76,11 @@
                                        class="mr-3"
                                        {% if address.is_default %}checked{% endif %}
                                        required>
-                                <span class="inline-block border-2 border-gray-300 rounded-lg p-4 hover:border-neyo-primary transition-colors cursor-pointer w-full">
-                                    <div class="font-semibold text-neyo-primary">
+                                <span class="inline-block border-2 rounded-2xl p-4 hover:border-[#8b4d56] transition-colors cursor-pointer w-full" style="border-color: #e8d5d9;">
+                                    <div class="font-semibold text-[#8b4d56]">
                                         {{ address.get_full_name }}
                                         {% if address.is_default %}
-                                            <span class="ml-2 text-xs bg-neyo-secondary text-white px-2 py-1 rounded">Default</span>
+                                            <span class="ml-2 text-xs checkout-gradient text-white px-2 py-1 rounded-full">Default</span>
                                         {% endif %}
                                     </div>
                                     <div class="text-gray-600 text-sm mt-1">
@@ -76,7 +93,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
+                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 mb-4">
                             <p class="text-yellow-800">
                                 <i class="fas fa-exclamation-triangle mr-2"></i>
                                 No saved addresses found. Please add a shipping address in your profile.
@@ -85,18 +102,19 @@
                     {% endif %}
                     
                     <a href="{% url 'accounts:profile' %}" 
-                       class="inline-block mt-4 text-neyo-accent hover:underline">
+                       class="inline-block mt-4 text-[#a0616a] hover:text-[#8b4d56] transition-colors font-medium">
                         <i class="fas fa-plus-circle mr-1"></i>Add New Address
                     </a>
                 </div>
                 
                 <!-- Use Same Address Checkbox -->
-                <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="bg-white rounded-2xl shadow-lg p-6" style="box-shadow: 0 4px 15px rgba(160,97,106,0.15);">
                     <label class="flex items-center cursor-pointer">
                         <input type="checkbox" 
                                name="use_same_address"
                                x-model="useSameAddress"
-                               class="w-5 h-5 text-neyo-primary rounded">
+                               class="w-5 h-5 rounded"
+                               style="color: #8b4d56;">
                         <span class="ml-3 font-semibold text-gray-700">
                             Use shipping address as billing address
                         </span>
@@ -104,8 +122,8 @@
                 </div>
                 
                 <!-- Billing Address -->
-                <div x-show="!useSameAddress" x-transition class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-neyo-primary mb-6">
+                <div x-show="!useSameAddress" x-transition class="bg-white rounded-2xl shadow-lg p-6" style="box-shadow: 0 4px 15px rgba(160,97,106,0.15);">
+                    <h2 class="text-2xl font-bold text-[#8b4d56] mb-6">
                         <i class="fas fa-file-invoice mr-2"></i>Billing Address
                     </h2>
                     
@@ -118,11 +136,11 @@
                                        value="{{ address.id }}" 
                                        class="mr-3"
                                        {% if address.is_default %}checked{% endif %}>
-                                <span class="inline-block border-2 border-gray-300 rounded-lg p-4 hover:border-neyo-primary transition-colors cursor-pointer w-full">
-                                    <div class="font-semibold text-neyo-primary">
+                                <span class="inline-block border-2 rounded-2xl p-4 hover:border-[#8b4d56] transition-colors cursor-pointer w-full" style="border-color: #e8d5d9;">
+                                    <div class="font-semibold text-[#8b4d56]">
                                         {{ address.get_full_name }}
                                         {% if address.is_default %}
-                                            <span class="ml-2 text-xs bg-neyo-secondary text-white px-2 py-1 rounded">Default</span>
+                                            <span class="ml-2 text-xs checkout-gradient text-white px-2 py-1 rounded-full">Default</span>
                                         {% endif %}
                                     </div>
                                     <div class="text-gray-600 text-sm mt-1">
@@ -135,7 +153,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
+                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 mb-4">
                             <p class="text-yellow-800">
                                 <i class="fas fa-exclamation-triangle mr-2"></i>
                                 No saved billing addresses found.
@@ -147,12 +165,13 @@
                 <!-- Action Buttons -->
                 <div class="flex gap-4">
                     <a href="{% url 'orders:checkout' %}" 
-                       class="flex-1 bg-white border-2 border-neyo-primary text-neyo-primary py-3 px-6 rounded-lg font-semibold text-center hover:bg-gray-50 transition-colors">
+                       class="flex-1 bg-white border-2 text-[#8b4d56] py-3 px-6 rounded-2xl font-semibold text-center hover:bg-[#f8f1f4] transition-colors"
+                       style="border-color: #8b4d56;">
                         <i class="fas fa-arrow-left mr-2"></i>Back
                     </a>
                     
                     <button type="submit" 
-                            class="flex-1 bg-neyo-secondary text-white py-3 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                            class="flex-1 checkout-gradient text-white py-3 px-6 rounded-2xl font-semibold hover:shadow-lg transition-all">
                         Continue to Payment
                         <i class="fas fa-arrow-right ml-2"></i>
                     </button>

@@ -2,9 +2,26 @@
 
 {% block title %}Checkout - NEYO{% endblock %}
 
+{% block extra_css %}
+<style>
+    .checkout-gradient {
+        background: linear-gradient(135deg, #a0616a, #8b4d56);
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fadeInUp {
+        animation: fadeInUp 0.8s ease-out;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Checkout Header -->
-<section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-8">
+<section class="checkout-gradient py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
             <h1 class="text-3xl font-bold mb-4">Secure Checkout</h1>
@@ -12,21 +29,21 @@
             <!-- Progress Steps -->
             <div class="flex items-center justify-center space-x-4 mt-6">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-neyo-secondary rounded-full flex items-center justify-center font-bold">
+                    <div class="w-10 h-10 bg-white text-[#8b4d56] rounded-full flex items-center justify-center font-bold shadow-lg">
                         1
                     </div>
                     <span class="ml-2 font-medium">Cart</span>
                 </div>
-                <div class="w-16 h-1 bg-gray-400"></div>
+                <div class="w-16 h-1 bg-white/30"></div>
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center font-bold">
+                    <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center font-bold">
                         2
                     </div>
                     <span class="ml-2 font-medium">Address</span>
                 </div>
-                <div class="w-16 h-1 bg-gray-400"></div>
+                <div class="w-16 h-1 bg-white/30"></div>
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center font-bold">
+                    <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center font-bold">
                         3
                     </div>
                     <span class="ml-2 font-medium">Payment</span>
@@ -37,32 +54,32 @@
 </section>
 
 <!-- Checkout Content -->
-<section class="py-12 bg-gray-50">
+<section class="py-12" style="background: linear-gradient(135deg, #f8f1f4 0%, #ffffff 50%, #f8f1f4 100%);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fadeInUp">
             
             <!-- Order Items -->
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-neyo-primary mb-6">Order Summary</h2>
+                <div class="bg-white rounded-2xl shadow-lg p-6" style="box-shadow: 0 4px 15px rgba(160,97,106,0.15);">
+                    <h2 class="text-2xl font-bold text-[#8b4d56] mb-6">Order Summary</h2>
                     
                     <div class="space-y-4">
                         {% for item in cart_items %}
-                        <div class="flex items-center gap-4 pb-4 border-b">
+                        <div class="flex items-center gap-4 pb-4 border-b" style="border-color: #e8d5d9;">
                             <div class="flex-shrink-0">
                                 {% if item.product.get_main_image %}
                                     <img src="{{ item.product.get_main_image.url }}" 
                                          alt="{{ item.product.name }}"
                                          class="w-20 h-20 object-cover rounded-lg">
                                 {% else %}
-                                    <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-image text-gray-400"></i>
+                                    <div class="w-20 h-20 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, rgba(160,97,106,0.1), rgba(139,77,86,0.05));">
+                                        <i class="fas fa-image text-[#a0616a]"></i>
                                     </div>
                                 {% endif %}
                             </div>
                             
                             <div class="flex-1">
-                                <h3 class="font-semibold text-neyo-primary">{{ item.product.name }}</h3>
+                                <h3 class="font-semibold text-[#8b4d56]">{{ item.product.name }}</h3>
                                 {% if item.variant %}
                                     <p class="text-sm text-gray-500">Size: {{ item.variant.size }}</p>
                                 {% endif %}
@@ -70,7 +87,7 @@
                             </div>
                             
                             <div class="text-right">
-                                <p class="font-bold text-neyo-secondary">${{ item.get_total_price }}</p>
+                                <p class="font-bold text-[#a0616a]">${{ item.get_total_price }}</p>
                             </div>
                         </div>
                         {% endfor %}
@@ -80,12 +97,13 @@
                 <!-- Action Buttons -->
                 <div class="flex gap-4">
                     <a href="{% url 'cart:view' %}" 
-                       class="flex-1 bg-white border-2 border-neyo-primary text-neyo-primary py-3 px-6 rounded-lg font-semibold text-center hover:bg-gray-50 transition-colors">
+                       class="flex-1 bg-white border-2 text-[#8b4d56] py-3 px-6 rounded-2xl font-semibold text-center hover:bg-[#f8f1f4] transition-colors"
+                       style="border-color: #8b4d56;">
                         <i class="fas fa-arrow-left mr-2"></i>Back to Cart
                     </a>
                     
                     <a href="{% url 'orders:checkout_address' %}" 
-                       class="flex-1 bg-neyo-secondary text-white py-3 px-6 rounded-lg font-semibold text-center hover:bg-yellow-600 transition-colors">
+                       class="flex-1 checkout-gradient text-white py-3 px-6 rounded-2xl font-semibold text-center hover:shadow-lg transition-all">
                         Continue to Address
                         <i class="fas fa-arrow-right ml-2"></i>
                     </a>
@@ -94,8 +112,8 @@
             
             <!-- Order Total -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-md p-6 sticky top-24">
-                    <h2 class="text-xl font-bold text-neyo-primary mb-6">Order Total</h2>
+                <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-24" style="box-shadow: 0 4px 15px rgba(160,97,106,0.15);">
+                    <h2 class="text-xl font-bold text-[#8b4d56] mb-6">Order Total</h2>
                     
                     <div class="space-y-3 mb-6">
                         <div class="flex justify-between text-gray-600">
@@ -117,8 +135,8 @@
                             {% endif %}
                         </div>
                         
-                        <div class="border-t-2 pt-3">
-                            <div class="flex justify-between text-xl font-bold text-neyo-primary">
+                        <div class="border-t-2 pt-3" style="border-color: #e8d5d9;">
+                            <div class="flex justify-between text-xl font-bold text-[#8b4d56]">
                                 <span>Total</span>
                                 <span>${{ total|floatformat:2 }}</span>
                             </div>
@@ -126,17 +144,23 @@
                     </div>
                     
                     <!-- Security Features -->
-                    <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                    <div class="bg-[#f8f1f4] rounded-2xl p-4 space-y-3">
                         <div class="flex items-center space-x-3 text-sm text-gray-600">
-                            <i class="fas fa-shield-alt text-green-600"></i>
+                            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-green-600"></i>
+                            </div>
                             <span>Secure SSL Encryption</span>
                         </div>
                         <div class="flex items-center space-x-3 text-sm text-gray-600">
-                            <i class="fas fa-lock text-green-600"></i>
+                            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-lock text-green-600"></i>
+                            </div>
                             <span>Payment Protection</span>
                         </div>
                         <div class="flex items-center space-x-3 text-sm text-gray-600">
-                            <i class="fas fa-undo text-green-600"></i>
+                            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-undo text-green-600"></i>
+                            </div>
                             <span>30-Day Returns</span>
                         </div>
                     </div>

@@ -8,7 +8,6 @@ from .models import UserProfile, Address
 # Create your views here.
 
 def login_view(request):
-    """User login view"""
     if request.user.is_authenticated:
         return redirect('core:home')
     
@@ -28,23 +27,19 @@ def login_view(request):
     return render(request, 'accounts/login.html')
 
 def logout_view(request):
-    """User logout view"""
     logout(request)
     messages.success(request, 'You have been logged out successfully')
     return redirect('core:home')
 
 def google_login(request):
-    """Google OAuth login"""
     messages.info(request, 'Google login will be implemented soon')
     return redirect('accounts:login')
 
 def google_callback(request):
-    """Google OAuth callback"""
     return redirect('accounts:login')
 
 @login_required
 def profile(request):
-    """User profile view with addresses"""
     # Get or create user profile
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     
@@ -67,7 +62,6 @@ def profile(request):
 
 @login_required
 def edit_profile(request):
-    """Edit user profile information"""
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     
     if request.method == 'POST':
@@ -92,7 +86,6 @@ def edit_profile(request):
 
 @login_required
 def add_address(request):
-    """Add new address"""
     if request.method == 'POST':
         address_type = request.POST.get('type')
         first_name = request.POST.get('first_name')
@@ -133,7 +126,6 @@ def add_address(request):
 
 @login_required
 def edit_address(request, address_id):
-    """Edit existing address"""
     address = get_object_or_404(Address, id=address_id, user=request.user)
     
     if request.method == 'POST':
@@ -166,7 +158,6 @@ def edit_address(request, address_id):
 
 @login_required
 def delete_address(request, address_id):
-    """Delete address"""
     address = get_object_or_404(Address, id=address_id, user=request.user)
     address.delete()
     messages.success(request, 'Address deleted successfully')
