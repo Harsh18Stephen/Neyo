@@ -88,6 +88,14 @@ DATABASES = {
     }
 }
 
+# Razorpay Configuration
+import os
+from decouple import config  
+
+RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID', default='')
+RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET', default='')
+RAZORPAY_WEBHOOK_SECRET = config('RAZORPAY_WEBHOOK_SECRET', default='')
+
 # Serve media and static files during development
 
 """ from django.conf import settings

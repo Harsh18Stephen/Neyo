@@ -126,6 +126,7 @@ def checkout_confirm(request):
         shipping_cost = Decimal('0') if subtotal > 50 else Decimal('5.99')
         total = subtotal + tax + shipping_cost
         
+        # Create order
         order = Order.objects.create(
             user=request.user,
             subtotal=subtotal,
@@ -138,6 +139,7 @@ def checkout_confirm(request):
             status='pending'
         )
         
+        # Create order items
         for cart_item in cart.items.all():
             OrderItem.objects.create(
                 order=order,
@@ -149,11 +151,15 @@ def checkout_confirm(request):
                 product_size=cart_item.variant.size if cart_item.variant else ''
             )
         
+        # Clear cart
         cart.clear()
         
+        # Clear session data
         request.session.pop('shipping_address_id', None)
         request.session.pop('billing_address_id', None)
         
+        # Redirect to payment processing
+        messages.success(request, 'Order created successfully. Please complete payment.')
         return redirect('payments:process', order_id=order.id)
         
     except Exception as e:

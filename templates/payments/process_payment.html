@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment - Order {{ order.order_number }} | NEYO{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment-gradient {
+        background: linear-gradient(135deg, #f8f1f4 0%, #ffffff 50%, #f8f1f4 100%);
+    }
+
+    .pay-button-gradient {
+        background: linear-gradient(135deg, #a0616a, #8b4d56);
+    }
+
+    .pay-button-gradient:hover {
+        box-shadow: 0 5px 15px rgba(160,97,106,0.3);
+        transform: translateY(-2px);
+    }
+
+    .order-info {
+        background: #f8f1f4;
+        border-radius: 16px;
+        padding: 24px;
+    }
+
+    .order-detail {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #e8d5d9;
+    }
+
+    .order-detail:last-child {
+        border-bottom: none;
+        font-weight: bold;
+        font-size: 18px;
+        color: #8b4d56;
+    }
+
+    .secure-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #a0616a;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-12 payment-gradient min-h-screen flex items-center">
+    <div class="max-w-lg mx-auto w-full bg-white rounded-2xl shadow-lg p-8 animate-fadeInUp">
+
+        <h1 class="text-3xl font-bold text-[#8b4d56] mb-2">Complete Your Payment</h1>
+        <p class="text-gray-600 mb-6">Order #{{ order.order_number }}</p>
+
+        <!-- Order Summary -->
+        <div class="order-info mb-6">
+            <div class="order-detail">
+                <span class="text-gray-600">Subtotal:</span>
+                <span class="text-gray-800 font-medium">₹{{ order.subtotal }}</span>
+            </div>
+            <div class="order-detail">
+                <span class="text-gray-600">Tax:</span>
+                <span class="text-gray-800 font-medium">₹{{ order.tax_amount }}</span>
+            </div>
+            <div class="order-detail">
+                <span class="text-gray-600">Shipping:</span>
+                <span class="text-gray-800 font-medium">₹{{ order.shipping_amount }}</span>
+            </div>
+            <div class="order-detail">
+                <span>Total Amount:</span>
+                <span>₹{{ order.total_amount }}</span>
+            </div>
+        </div>
+
+        <!-- Pay Button -->
+        <button id="payButton"
+                class="w-full py-4 text-white font-semibold text-lg rounded-xl transition-all duration-300 pay-button-gradient"
+                onclick="initiatePayment()">
+            Pay ₹{{ order.total_amount }}
+        </button>
+
+        <!-- Loading State -->
+        <div class="loading text-center mt-6 hidden" id="loadingDiv">
+            <div class="spinner"></div>
+            <p class="mt-3 text-gray-500">Processing payment...</p>
+        </div>
+
+        <!-- Secure Badge -->
+        <div class="secure-badge mt-6">
+            <i class="fas fa-lock mr-2 text-[#a0616a]"></i>
+            Secure payment powered by Razorpay
+        </div>
+    </div>
+</section>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    const razorpayKeyId = "{{ razorpay_key_id }}";
+    const razorpayOrderId = "{{ razorpay_order_id }}";
+    const amount = {{ amount }} * 100;
+    const currency = "{{ currency }}";
+    const orderId = "{{ order.id }}";
+    const orderNumber = "{{ order.order_number }}";
+
+    function initiatePayment() {
+        const options = {
+            key: razorpayKeyId,
+            amount: amount,
+            currency: currency,
+            name: "NEYO Naturals",
+            description: "Order #" + orderNumber,
+            order_id: razorpayOrderId,
+            handler: function(response) {
+                verifyPayment(response);
+            },
+            prefill: {
+                name: "{{ user.get_full_name }}",
+                email: "{{ user.email }}",
+                contact: "{{ user.profile.phone }}"
+            },
+            theme: { color: "#a0616a" }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function(response) {
+            handlePaymentFailure(response.error);
+        });
+        rzp.open();
+    }
+
+    function verifyPayment(response) {
+        document.getElementById('payButton').style.display = 'none';
+        document.getElementById('loadingDiv').classList.remove('hidden');
+
+        fetch('/payments/verify/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = data.redirect_url;
+            } else {
+                alert('Payment verification failed: ' + data.error);
+                window.location.href = '/payments/failed/?order_id=' + orderId + '&error=' + encodeURIComponent(data.error);
+            }
+        })
+        .catch(error => {
+            alert('Error verifying payment: ' + error);
+            window.location.href = '/payments/failed/?order_id=' + orderId;
+        });
+    }
+
+    function handlePaymentFailure(error) {
+        alert('Payment failed: ' + error.description);
+        window.location.href = '/payments/failed/?order_id=' + orderId + '&error=' + encodeURIComponent(error.description);
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}
