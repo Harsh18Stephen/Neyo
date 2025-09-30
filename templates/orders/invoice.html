@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #{{ order.order_number }} - NEYO</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; padding: 20px; }
+        .invoice-container { max-width: 800px; margin: 0 auto; background: white; }
+        .invoice-header { border-bottom: 3px solid #1f2937; padding-bottom: 20px; margin-bottom: 30px; }
+        .invoice-header h1 { color: #1f2937; font-size: 36px; margin-bottom: 5px; }
+        .invoice-header .invoice-number { color: #f59e0b; font-size: 18px; font-weight: bold; }
+        .company-info { margin-top: 20px; }
+        .company-info h2 { color: #1f2937; font-size: 24px; margin-bottom: 10px; }
+        .info-section { margin-bottom: 30px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+        .info-box h3 { color: #1f2937; font-size: 14px; margin-bottom: 10px; text-transform: uppercase; }
+        .info-box p { margin-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        thead { background: #1f2937; color: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { font-weight: bold; }
+        .text-right { text-align: right; }
+        .total-section { margin-top: 30px; float: right; width: 300px; }
+        .total-row { display: flex; justify-content: space-between; padding: 8px 0; }
+        .total-row.grand-total { border-top: 2px solid #1f2937; margin-top: 10px; padding-top: 10px; font-size: 18px; font-weight: bold; color: #1f2937; }
+        .footer { clear: both; margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 12px; }
+        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .status-paid { background: #d1fae5; color: #065f46; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Print Button (hidden when printing) -->
+        <div class="no-print" style="text-align: right; margin-bottom: 20px;">
+            <button onclick="window.print()" style="background: #1f2937; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                Print Invoice
+            </button>
+            <a href="{% url 'orders:detail' order.id %}" style="margin-left: 10px; background: white; color: #1f2937; padding: 10px 20px; border: 2px solid #1f2937; border-radius: 5px; text-decoration: none; display: inline-block;">
+                Back to Order
+            </a>
+        </div>
+        
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+            <h1>NEYO</h1>
+            <p class="invoice-number">INVOICE #{{ order.order_number }}</p>
+            <p style="margin-top: 10px;">
+                <span class="status-badge {% if order.payment_status == 'paid' %}status-paid{% else %}status-pending{% endif %}">
+                    {{ order.get_payment_status_display|upper }}
+                </span>
+            </p>
+        </div>
+        
+        <!-- Company & Customer Info -->
+        <div class="info-grid">
+            <div class="info-box">
+                <h3>From</h3>
+                <div class="company-info">
+                    <strong>NEYO</strong><br>
+                    123 Commerce Street<br>
+                    Business District<br>
+                    City, State 12345<br>
+                    contact@neyo.com
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h3>Bill To</h3>
+                <strong>{{ order.user.get_full_name|default:order.user.username }}</strong><br>
+                {{ order.user.email }}<br>
+                <br>
+                <strong>Billing Address:</strong><br>
+                <span style="white-space: pre-line;">{{ order.billing_address }}</span>
+            </div>
+        </div>
+        
+        <!-- Order Info -->
+        <div class="info-grid">
+            <div class="info-box">
+                <h3>Invoice Details</h3>
+                <p><strong>Invoice Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+                <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+                <p><strong>Order ID:</strong> {{ order.id }}</p>
+            </div>
+            
+            <div class="info-box">
+                <h3>Shipping Address</h3>
+                <span style="white-space: pre-line;">{{ order.shipping_address }}</span>
+            </div>
+        </div>
+        
+        <!-- Items Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th class="text-right">Quantity</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_items %}
+                <tr>
+                    <td><strong>{{ item.product_name }}</strong></td>
+                    <td>{% if item.product_size %}Size: {{ item.product_size }}{% else %}-{% endif %}</td>
+                    <td class="text-right">{{ item.quantity }}</td>
+                    <td class="text-right">${{ item.price }}</td>
+                    <td class="text-right"><strong>${{ item.get_total_price }}</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Totals -->
+        <div class="total-section">
+            <div class="total-row">
+                <span>Subtotal:</span>
+                <span>${{ order.subtotal }}</span>
+            </div>
+            <div class="total-row">
+                <span>Tax (10%):</span>
+                <span>${{ order.tax_amount }}</span>
+            </div>
+            <div class="total-row">
+                <span>Shipping:</span>
+                <span>{% if order.shipping_amount == 0 %}FREE{% else %} ${{ order.shipping_amount }}{% endif %}</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>TOTAL:</span>
+                <span>${{ order.total_amount }}</span>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Thank you for your business!</strong></p>
+            <p>NEYO • 123 Commerce Street, Business District, City 12345</p>
+            <p>Email: contact@neyo.com • Phone: +1 (555) 123-4567</p>
+            <p style="margin-top: 15px; font-size: 11px;">
+                This is a computer-generated invoice. No signature is required.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Order History - NEYO{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl font-bold text-white text-center">
+            <i class="fas fa-box mr-3"></i>Order History
+        </h1>
+    </div>
+</section>
+
+<!-- Order History Content -->
+<section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Back to Profile -->
+        <div class="mb-6">
+            <a href="{% url 'accounts:profile' %}" 
+               class="text-neyo-accent hover:underline">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Profile
+            </a>
+        </div>
+        
+        {% if orders %}
+            <div class="space-y-6">
+                {% for order in orders %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                    <!-- Order Header -->
+                    <div class="bg-gray-50 px-6 py-4 border-b flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div class="mb-3 md:mb-0">
+                            <h3 class="text-lg font-bold text-neyo-primary">
+                                Order #{{ order.order_number }}
+                            </h3>
+                            <p class="text-sm text-gray-600">
+                                Placed on {{ order.created_at|date:"M d, Y \a\t h:i A" }}
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="text-right">
+                                <p class="text-sm text-gray-600">Total</p>
+                                <p class="text-xl font-bold text-neyo-secondary">${{ order.total_amount }}</p>
+                            </div>
+                            
+                            <!-- Status Badge -->
+                            <span class="px-4 py-2 rounded-full text-sm font-semibold
+                                        {% if order.status == 'delivered' %}bg-green-100 text-green-800
+                                        {% elif order.status == 'processing' %}bg-blue-100 text-blue-800
+                                        {% elif order.status == 'shipped' %}bg-purple-100 text-purple-800
+                                        {% elif order.status == 'cancelled' %}bg-red-100 text-red-800
+                                        {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Order Items -->
+                    <div class="px-6 py-4">
+                        <div class="space-y-3">
+                            {% for item in order.items.all|slice:":3" %}
+                            <div class="flex items-center space-x-4">
+                                {% if item.product.get_main_image %}
+                                    <img src="{{ item.product.get_main_image.url }}" 
+                                         alt="{{ item.product_name }}"
+                                         class="w-16 h-16 object-cover rounded">
+                                {% else %}
+                                    <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-400"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-800">{{ item.product_name }}</p>
+                                    <p class="text-sm text-gray-600">
+                                        {% if item.product_size %}Size: {{ item.product_size }} • {% endif %}
+                                        Qty: {{ item.quantity }}
+                                    </p>
+                                </div>
+                                
+                                <p class="font-semibold text-gray-800">${{ item.get_total_price }}</p>
+                            </div>
+                            {% endfor %}
+                            
+                            {% if order.items.count > 3 %}
+                            <p class="text-sm text-gray-600 italic">
+                                + {{ order.items.count|add:"-3" }} more item{{ order.items.count|add:"-3"|pluralize }}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Order Actions -->
+                    <div class="bg-gray-50 px-6 py-4 border-t flex flex-col sm:flex-row gap-3">
+                        <a href="{% url 'orders:detail' order.id %}" 
+                           class="flex-1 bg-neyo-primary text-white py-2 px-4 rounded-lg text-center font-semibold hover:bg-gray-800 transition-colors">
+                            <i class="fas fa-eye mr-2"></i>View Details
+                        </a>
+                        
+                        <a href="{% url 'orders:invoice' order.id %}" 
+                           class="flex-1 bg-white border-2 border-neyo-primary text-neyo-primary py-2 px-4 rounded-lg text-center font-semibold hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-file-download mr-2"></i>Invoice
+                        </a>
+                        
+                        {% if order.can_cancel %}
+                        <form method="post" action="{% url 'orders:cancel' order.id %}" class="flex-1">
+                            {% csrf_token %}
+                            <button type="submit" 
+                                    onclick="return confirm('Are you sure you want to cancel this order?')"
+                                    class="w-full bg-red-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-600 transition-colors">
+                                <i class="fas fa-times-circle mr-2"></i>Cancel Order
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+        {% else %}
+            <!-- No Orders -->
+            <div class="bg-white rounded-lg shadow-md p-12 text-center">
+                <div class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-box-open text-gray-300 text-6xl"></i>
+                </div>
+                
+                <h2 class="text-2xl font-bold text-gray-700 mb-4">No Orders Yet</h2>
+                <p class="text-gray-500 mb-8">You haven't placed any orders yet. Start shopping to see your orders here.</p>
+                
+                <a href="{% url 'products:list' %}" 
+                   class="inline-block bg-neyo-primary text-white py-3 px-8 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                    <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

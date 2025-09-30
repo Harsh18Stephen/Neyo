@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
 
-{% block title %}Add Address - NEYO{% endblock %}
+{% block title %}Edit Address - NEYO{% endblock %}
 
 {% block content %}
+<!-- Header -->
 <section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl font-bold text-white text-center">Add New Address</h1>
+        <h1 class="text-4xl font-bold text-white text-center">Edit Address</h1>
     </div>
 </section>
 
+<!-- Address Form -->
 <section class="py-12 bg-gray-50">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white rounded-lg shadow-md p-8">
-            <form method="post" action="{% url 'accounts:add_address' %}">
+            <form method="post" action="{% url 'accounts:edit_address' address.id %}">
                 {% csrf_token %}
-                
-                <input type="hidden" name="type" value="{{ request.GET.type|default:'shipping' }}">
                 
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold text-neyo-primary">
-                        {% if request.GET.type == 'billing' %}
+                        {% if address.type == 'billing' %}
                             <i class="fas fa-file-invoice mr-2"></i>Billing Address
                         {% else %}
                             <i class="fas fa-shipping-fast mr-2"></i>Shipping Address
@@ -27,6 +27,7 @@
                     </h2>
                 </div>
                 
+                <!-- Name Fields -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -35,6 +36,7 @@
                         <input type="text" 
                                id="first_name" 
                                name="first_name" 
+                               value="{{ address.first_name }}"
                                required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
                     </div>
@@ -46,11 +48,13 @@
                         <input type="text" 
                                id="last_name" 
                                name="last_name" 
+                               value="{{ address.last_name }}"
                                required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
                     </div>
                 </div>
                 
+                <!-- Company (Optional) -->
                 <div class="mb-6">
                     <label for="company" class="block text-sm font-medium text-gray-700 mb-2">
                         Company (Optional)
@@ -58,9 +62,11 @@
                     <input type="text" 
                            id="company" 
                            name="company"
+                           value="{{ address.company }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
                 </div>
                 
+                <!-- Address Lines -->
                 <div class="mb-6">
                     <label for="address_line_1" class="block text-sm font-medium text-gray-700 mb-2">
                         Address Line 1 *
@@ -68,6 +74,7 @@
                     <input type="text" 
                            id="address_line_1" 
                            name="address_line_1" 
+                           value="{{ address.address_line_1 }}"
                            required
                            placeholder="Street address, P.O. box"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
@@ -80,10 +87,12 @@
                     <input type="text" 
                            id="address_line_2" 
                            name="address_line_2"
-                           placeholder="Apartment, suite, unit"
+                           value="{{ address.address_line_2 }}"
+                           placeholder="Apartment, suite, unit, building, floor, etc."
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
                 </div>
                 
+                <!-- City, State, ZIP -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div>
                         <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
@@ -92,6 +101,7 @@
                         <input type="text" 
                                id="city" 
                                name="city" 
+                               value="{{ address.city }}"
                                required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
                     </div>
@@ -103,6 +113,7 @@
                         <input type="text" 
                                id="state" 
                                name="state" 
+                               value="{{ address.state }}"
                                required
                                placeholder="e.g. NY"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
@@ -115,12 +126,14 @@
                         <input type="text" 
                                id="postal_code" 
                                name="postal_code" 
+                               value="{{ address.postal_code }}"
                                required
                                placeholder="12345"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
                     </div>
                 </div>
                 
+                <!-- Country -->
                 <div class="mb-6">
                     <label for="country" class="block text-sm font-medium text-gray-700 mb-2">
                         Country *
@@ -129,22 +142,25 @@
                             name="country" 
                             required
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent">
-                        <option value="United States">United States</option>
-                        <option value="Canada">Canada</option>
-                        <option value="United Kingdom">United Kingdom</option>
-                        <option value="Australia">Australia</option>
+                        <option value="United States" {% if address.country == 'United States' %}selected{% endif %}>United States</option>
+                        <option value="Canada" {% if address.country == 'Canada' %}selected{% endif %}>Canada</option>
+                        <option value="United Kingdom" {% if address.country == 'United Kingdom' %}selected{% endif %}>United Kingdom</option>
+                        <option value="Australia" {% if address.country == 'Australia' %}selected{% endif %}>Australia</option>
                     </select>
                 </div>
                 
+                <!-- Default Address Checkbox -->
                 <div class="mb-6">
                     <label class="flex items-center cursor-pointer">
                         <input type="checkbox" 
                                name="is_default"
+                               {% if address.is_default %}checked{% endif %}
                                class="w-5 h-5 text-neyo-primary rounded">
                         <span class="ml-3 text-gray-700">Set as default address</span>
                     </label>
                 </div>
                 
+                <!-- Action Buttons -->
                 <div class="flex gap-4">
                     <a href="{% url 'accounts:profile' %}" 
                        class="flex-1 bg-white border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold text-center hover:bg-gray-50 transition-colors">
@@ -153,7 +169,7 @@
                     
                     <button type="submit" 
                             class="flex-1 bg-neyo-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
-                        <i class="fas fa-save mr-2"></i>Save Address
+                        <i class="fas fa-save mr-2"></i>Update Address
                     </button>
                 </div>
             </form>

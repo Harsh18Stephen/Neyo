@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment - NEYO{% endblock %}
+
+{% block content %}
+<!-- Checkout Header -->
+<section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center text-white">
+            <h1 class="text-3xl font-bold mb-4">Payment Information</h1>
+            
+            <!-- Progress Steps -->
+            <div class="flex items-center justify-center space-x-4 mt-6">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-check font-bold"></i>
+                    </div>
+                    <span class="ml-2 font-medium">Cart</span>
+                </div>
+                <div class="w-16 h-1 bg-green-500"></div>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-check font-bold"></i>
+                    </div>
+                    <span class="ml-2 font-medium">Address</span>
+                </div>
+                <div class="w-16 h-1 bg-neyo-secondary"></div>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-neyo-secondary rounded-full flex items-center justify-center font-bold">
+                        3
+                    </div>
+                    <span class="ml-2 font-medium">Payment</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Payment Form -->
+<section class="py-12 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Payment Details -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-neyo-primary mb-6">
+                        <i class="fas fa-credit-card mr-2"></i>Payment Details
+                    </h2>
+                    
+                    <form method="post" action="{% url 'orders:checkout_confirm' %}" id="payment-form">
+                        {% csrf_token %}
+                        
+                        <!-- Stripe Card Element will go here -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">
+                                Card Information
+                            </label>
+                            
+                            <!-- Placeholder for Stripe Elements -->
+                            <div class="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
+                                <div id="card-element" class="mb-3">
+                                    <!-- Stripe card element will be inserted here -->
+                                </div>
+                                <div id="card-errors" class="text-red-600 text-sm"></div>
+                            </div>
+                            
+                            <!-- For now, simple card input (will be replaced with Stripe) -->
+                            <div class="space-y-4 mt-4">
+                                <div>
+                                    <label for="card_number" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Card Number
+                                    </label>
+                                    <input type="text" 
+                                           id="card_number" 
+                                           placeholder="1234 5678 9012 3456"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary">
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="expiry" class="block text-sm font-medium text-gray-700 mb-2">
+                                            Expiry Date
+                                        </label>
+                                        <input type="text" 
+                                               id="expiry" 
+                                               placeholder="MM/YY"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="cvc" class="block text-sm font-medium text-gray-700 mb-2">
+                                            CVC
+                                        </label>
+                                        <input type="text" 
+                                               id="cvc" 
+                                               placeholder="123"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Billing Name -->
+                        <div class="mb-6">
+                            <label for="cardholder_name" class="block text-sm font-medium text-gray-700 mb-2">
+                                Cardholder Name
+                            </label>
+                            <input type="text" 
+                                   id="cardholder_name"
+                                   placeholder="John Doe"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary">
+                        </div>
+                        
+                        <!-- Security Note -->
+                        <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+                            <div class="flex items-start">
+                                <i class="fas fa-shield-alt text-blue-600 text-2xl mr-3 mt-1"></i>
+                                <div>
+                                    <h3 class="font-semibold text-blue-900 mb-1">Secure Payment</h3>
+                                    <p class="text-sm text-blue-700">
+                                        Your payment information is encrypted and secure. We use industry-standard SSL encryption to protect your data.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex gap-4">
+                            <a href="{% url 'orders:checkout_address' %}" 
+                               class="flex-1 bg-white border-2 border-neyo-primary text-neyo-primary py-3 px-6 rounded-lg font-semibold text-center hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i>Back
+                            </a>
+                            
+                            <button type="submit" 
+                                    class="flex-1 bg-neyo-secondary text-white py-3 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                                <i class="fas fa-lock mr-2"></i>Complete Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-md p-6 sticky top-24">
+                    <h2 class="text-xl font-bold text-neyo-primary mb-6">Order Summary</h2>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Subtotal</span>
+                            <span class="font-semibold">${{ subtotal|floatformat:2 }}</span>
+                        </div>
+                        
+                        <div class="flex justify-between text-gray-600">
+                            <span>Tax</span>
+                            <span class="font-semibold">${{ tax|floatformat:2 }}</span>
+                        </div>
+                        
+                        <div class="flex justify-between text-gray-600">
+                            <span>Shipping</span>
+                            {% if shipping == 0 %}
+                                <span class="font-semibold text-green-600">FREE</span>
+                            {% else %}
+                                <span class="font-semibold">${{ shipping|floatformat:2 }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="border-t-2 pt-3">
+                            <div class="flex justify-between text-xl font-bold text-neyo-primary">
+                                <span>Total</span>
+                                <span>${{ total|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Accepted Cards -->
+                    <div class="border-t pt-4">
+                        <p class="text-sm text-gray-600 mb-3">We Accept:</p>
+                        <div class="flex space-x-3 text-3xl text-gray-400">
+                            <i class="fab fa-cc-visa"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-amex"></i>
+                            <i class="fab fa-cc-discover"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stripe Script (will be added when implementing Stripe) -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    // Stripe integration will be added here
+    // For now, just prevent form submission for demo
+    document.getElementById('payment-form').addEventListener('submit', function(e) {
+        // This will be replaced with actual Stripe payment processing
+        console.log('Payment form submitted');
+    });
+</script>
+{% endblock %}
