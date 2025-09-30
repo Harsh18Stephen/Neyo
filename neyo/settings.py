@@ -15,6 +15,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 # from decouple import config  
 import os
+from django.contrib import admin
+from django.urls import path, include
+from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,6 +87,19 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Serve media and static files during development
+
+""" from django.conf import settings
+from django.urls import URLPatterns
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+ """
+# Custom error pages
+handler404 = 'core.views.error_404'
+handler500 = 'core.views.error_500'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
