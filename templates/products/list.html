@@ -7,8 +7,8 @@
 <section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
-            <h1 class="text-4xl font-bold mb-4">Our Products</h1>
-            <p class="text-lg text-gray-200">Discover our curated collection of premium products</p>
+            <h1 class="text-4xl font-bold text-brand-primary mb-4">Our Products</h1>
+            <p class="text-lg text-brand-secondary">Discover our curated collection of premium products</p>
         </div>
     </div>
 </section>
@@ -96,10 +96,12 @@
                                 ${{ product.price }}
                             </span>
                             
-                            <a href="{% url 'products:detail' product.slug %}" 
-                               class="bg-neyo-primary text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium">
+                            <a href="{% url 'products:detail' product.slug %}"
+                                class="inline-flex items-center justify-center bg-[#8b4d56] text-white  px-4 py-2.5 rounded-xl font-medium text-sm shadow-md hover:bg-[#a0616a] focus:outline-none focus:ring-2  focus:ring-[#8b4d56]/70 focus:ring-offset-2 transition-all duration-200 ease-in-out">
+                                <i class="fas fa-eye mr-2 text-white/90"></i>
                                 View Details
                             </a>
+
                         </div>
                         
                         <!-- Available Sizes -->
@@ -116,39 +118,39 @@
                 {% endfor %}
             </div>
             
-            <!-- Pagination -->
-            {% if products.has_other_pages %}
-            <div class="mt-12 flex justify-center">
-                <nav class="flex items-center space-x-2">
-                    {% if products.has_previous %}
-                        <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" 
-                           class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-angle-double-left"></i>
-                        </a>
-                        <a href="?page={{ products.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                           class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-angle-left"></i>
-                        </a>
-                    {% endif %}
-                    
-                    <span class="px-4 py-2 bg-neyo-primary text-white rounded-lg font-medium">
-                        Page {{ products.number }} of {{ products.paginator.num_pages }}
-                    </span>
-                    
-                    {% if products.has_next %}
-                        <a href="?page={{ products.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                           class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-angle-right"></i>
-                        </a>
-                        <a href="?page={{ products.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                           class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-angle-double-right"></i>
-                        </a>
-                    {% endif %}
-                </nav>
-            </div>
-            {% endif %}
-            
+        <!-- Pagination -->
+        {% if products.has_other_pages %}
+        <div class="mt-12 flex justify-center">
+            <nav class="flex items-center space-x-2">
+                {% if products.has_previous %}
+                    <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" 
+                        class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                    <a href="?page={{ products.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                        class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                {% endif %}
+                
+                <span class="px-4 py-2 bg-neyo-primary text-white rounded-lg font-medium">
+                    Page {{ products.number }} of {{ products.paginator.num_pages }}
+                </span>
+                
+                {% if products.has_next %}
+                    <a href="?page={{ products.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                        class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="?page={{ products.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                        class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+        {% endif %}
+        
         {% else %}
             <!-- No Products Found -->
             <div class="text-center py-16">

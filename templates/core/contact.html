@@ -6,10 +6,10 @@
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl lg:text-5xl font-bold text-white mb-4">
+        <h1 class="text-4xl lg:text-5xl font-bold text-brand-primary mb-4">
             Get in Touch
         </h1>
-        <p class="text-xl text-gray-200 max-w-2xl mx-auto">
+        <p class="text-xl text-brand-secondary max-w-2xl mx-auto">
             Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
         </p>
     </div>
@@ -152,19 +152,24 @@
                     </div>
                     
                     <div>
-                        <button type="submit" 
-                                :disabled="submitting"
-                                @click="submitting = true"
-                                class="w-full bg-neyo-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-neyo-primary focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                            <span x-show="!submitting">
-                                <i class="fas fa-paper-plane mr-2"></i>
-                                Send Message
+                        <button type="submit" :disabled="submitting" @click="submitting = true"
+                            class="w-full bg-[#8b4d56] text-white py-3 px-6 rounded-xl font-medium
+                                shadow-md hover:bg-[#a0616a] focus:outline-none focus:ring-2 
+                                focus:ring-[#8b4d56]/70 focus:ring-offset-2 
+                                transition-all duration-200 ease-in-out
+                                disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                            
+                            <span x-show="!submitting" class="flex items-center gap-2">
+                                <i class="fas fa-paper-plane text-white/90"></i>
+                                <span>Send Message</span>
                             </span>
-                            <span x-show="submitting">
-                                <i class="fas fa-spinner fa-spin mr-2"></i>
-                                Sending...
+
+                            <span x-show="submitting" class="flex items-center gap-2">
+                                <i class="fas fa-spinner fa-spin text-white/90"></i>
+                                <span>Sending...</span>
                             </span>
                         </button>
+
                     </div>
                     
                     <p class="text-sm text-gray-500 text-center">
