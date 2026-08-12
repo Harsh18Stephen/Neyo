@@ -9,4 +9,7 @@ urlpatterns = [
     path('webhook/', views.stripe_webhook, name='stripe_webhook'),
     path('success/', views.payment_success, name='success'),
     path('failed/', views.payment_failed, name='failed'),
+    path('create-order/<int:order_id>/', views.create_order, name='create_order'),
+    path('create-order/<int:order_id>/', views.create_order, name='create_order'),
+    path('verify/', views.payment_verify, name='payment_verify'),
 ]

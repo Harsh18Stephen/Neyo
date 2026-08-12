@@ -20,6 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
+from core import views
+
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
@@ -31,7 +33,6 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
     path('payments/', include('payments.urls')),
-    
 ]
 
 # Serve media and static files during development

@@ -27,8 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-neyo-temporary-development-key-change-later-12345'
 
 # Razer pay Kerys
-RAZORPAY_KEY_ID = "rzp_test_xxxxxxxxx"
-RAZORPAY_KEY_SECRET = "xxxxxxxxxxxxxxxx"
+RAZORPAY_KEY_ID = "rzp_test_TOp2o46mWZtaTL"
+RAZORPAY_KEY_SECRET = "HhSVwgDk47U1MMamz1TZBYDt"
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

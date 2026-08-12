@@ -36,7 +36,7 @@
     </div>
 </section>
 
-<!-- Payment Form -->
+<!-- Payment Section -->
 <section class="py-12 bg-gray-50">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -47,98 +47,47 @@
                     <h2 class="text-2xl font-bold text-neyo-primary mb-6">
                         <i class="fas fa-credit-card mr-2"></i>Payment Details
                     </h2>
-                    
-                    <form method="post" action="{% url 'orders:checkout_confirm' %}" id="payment-form">
-                        {% csrf_token %}
-                        
-                        <!-- Stripe Card Element will go here -->
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-gray-700 mb-3">
-                                Card Information
-                            </label>
-                            
-                            <!-- Placeholder for Stripe Elements -->
-                            <div class="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
-                                <div id="card-element" class="mb-3">
-                                    <!-- Stripe card element will be inserted here -->
-                                </div>
-                                <div id="card-errors" class="text-red-600 text-sm"></div>
-                            </div>
-                            
-                            <!-- For now, simple card input (will be replaced with Stripe) -->
-                            <div class="space-y-4 mt-4">
-                                <div>
-                                    <label for="card_number" class="block text-sm font-medium text-gray-700 mb-2">
-                                        Card Number
-                                    </label>
-                                    <input type="text" 
-                                           id="card_number" 
-                                           placeholder="1234 5678 9012 3456"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary">
-                                </div>
-                                
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="expiry" class="block text-sm font-medium text-gray-700 mb-2">
-                                            Expiry Date
-                                        </label>
-                                        <input type="text" 
-                                               id="expiry" 
-                                               placeholder="MM/YY"
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary">
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="cvc" class="block text-sm font-medium text-gray-700 mb-2">
-                                            CVC
-                                        </label>
-                                        <input type="text" 
-                                               id="cvc" 
-                                               placeholder="123"
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary">
-                                    </div>
-                                </div>
+
+                    <!-- Razorpay Info Panel -->
+                    <div class="border-2 border-gray-200 rounded-lg p-6 bg-gray-50 mb-6 text-center">
+                        <i class="fas fa-shield-alt text-4xl text-[#8b4d56] mb-3"></i>
+                        <p class="text-gray-700 font-medium mb-1">
+                            You'll be redirected to Razorpay's secure checkout
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Pay via Card, UPI, Netbanking, or Wallet
+                        </p>
+                    </div>
+
+                    <!-- Security Note -->
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-shield-alt text-blue-600 text-2xl mr-3 mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-blue-900 mb-1">Secure Payment</h3>
+                                <p class="text-sm text-blue-700">
+                                    Your payment is processed directly by Razorpay. NEYO never sees or stores your card, UPI, or bank details.
+                                </p>
                             </div>
                         </div>
-                        
-                        <!-- Billing Name -->
-                        <div class="mb-6">
-                            <label for="cardholder_name" class="block text-sm font-medium text-gray-700 mb-2">
-                                Cardholder Name
-                            </label>
-                            <input type="text" 
-                                   id="cardholder_name"
-                                   placeholder="John Doe"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary">
-                        </div>
-                        
-                        <!-- Security Note -->
-                        <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
-                            <div class="flex items-start">
-                                <i class="fas fa-shield-alt text-blue-600 text-2xl mr-3 mt-1"></i>
-                                <div>
-                                    <h3 class="font-semibold text-blue-900 mb-1">Secure Payment</h3>
-                                    <p class="text-sm text-blue-700">
-                                        Your payment information is encrypted and secure. We use industry-standard SSL encryption to protect your data.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Action Buttons -->
-                        <div class="flex gap-4">
-                            <a href="{% url 'orders:checkout_address' %}" 
-                               class="flex-1 bg-white border-2 border-neyo-primary text-neyo-primary py-3 px-6 rounded-lg font-semibold text-center hover:bg-gray-50 transition-colors">
-                                <i class="fas fa-arrow-left mr-2"></i>Back
-                            </a>
-                            
-<button type="submit" 
-        class="flex-1 bg-[#8b4d56] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:bg-[#733f47] hover:shadow-lg hover:-translate-y-1 active:translate-y-0">
-    <i class="fas fa-lock mr-2"></i>
-    Complete Order
-</button>
-                        </div>
-                    </form>
+                    </div>
+
+                    <div id="payment-errors" class="text-red-600 text-sm mb-4"></div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-4">
+                        <a href="{% url 'orders:checkout_address' %}" 
+                           class="flex-1 bg-white border-2 border-neyo-primary text-neyo-primary py-3 px-6 rounded-lg font-semibold text-center hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i>Back
+                        </a>
+
+                        <button type="button" 
+                                id="rzp-button"
+                                class="flex-1 bg-[#8b4d56] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:bg-[#733f47] hover:shadow-lg hover:-translate-y-1 active:translate-y-0">
+                            <i class="fas fa-lock mr-2"></i>
+                            Pay ₹{{ total|floatformat:2 }}
+                        </button>
+                    </div>
                 </div>
             </div>
             
@@ -150,12 +99,12 @@
                     <div class="space-y-3 mb-6">
                         <div class="flex justify-between text-gray-600">
                             <span>Subtotal</span>
-                            <span class="font-semibold">${{ subtotal|floatformat:2 }}</span>
+                            <span class="font-semibold">₹{{ subtotal|floatformat:2 }}</span>
                         </div>
                         
                         <div class="flex justify-between text-gray-600">
                             <span>Tax</span>
-                            <span class="font-semibold">${{ tax|floatformat:2 }}</span>
+                            <span class="font-semibold">₹{{ tax|floatformat:2 }}</span>
                         </div>
                         
                         <div class="flex justify-between text-gray-600">
@@ -163,26 +112,26 @@
                             {% if shipping == 0 %}
                                 <span class="font-semibold text-green-600">FREE</span>
                             {% else %}
-                                <span class="font-semibold">${{ shipping|floatformat:2 }}</span>
+                                <span class="font-semibold">₹{{ shipping|floatformat:2 }}</span>
                             {% endif %}
                         </div>
                         
                         <div class="border-t-2 pt-3">
                             <div class="flex justify-between text-xl font-bold text-neyo-primary">
                                 <span>Total</span>
-                                <span>${{ total|floatformat:2 }}</span>
+                                <span>₹{{ total|floatformat:2 }}</span>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Accepted Cards -->
+                    <!-- Accepted Methods -->
                     <div class="border-t pt-4">
                         <p class="text-sm text-gray-600 mb-3">We Accept:</p>
                         <div class="flex space-x-3 text-3xl text-gray-400">
                             <i class="fab fa-cc-visa"></i>
                             <i class="fab fa-cc-mastercard"></i>
-                            <i class="fab fa-cc-amex"></i>
-                            <i class="fab fa-cc-discover"></i>
+                            <i class="fab fa-google-pay"></i>
+                            <i class="fas fa-university"></i>
                         </div>
                     </div>
                 </div>
@@ -191,14 +140,64 @@
     </div>
 </section>
 
-<!-- Stripe Script (will be added when implementing Stripe) -->
-<script src="https://js.stripe.com/v3/"></script>
+<!-- Razorpay Checkout -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    // Stripe integration will be added here
-    // For now, just prevent form submission for demo
-    document.getElementById('payment-form').addEventListener('submit', function(e) {
-        // This will be replaced with actual Stripe payment processing
-        console.log('Payment form submitted');
-    });
+    document.getElementById('rzp-button').onclick = function (e) {
+        var options = {
+            "key": "{{ razorpay_merchant_key }}",
+            "amount": "{{ amount }}",
+            "currency": "INR",
+            "name": "NEYO",
+            "description": "Order #{{ order.order_number }}",
+            "order_id": "{{ razorpay_order_id }}",
+            "handler": function (response) {
+                fetch("{% url 'payments:payment_verify' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_signature: response.razorpay_signature
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = "{% url 'orders:success' order_id=order.id %}";
+                    } else {
+                        document.getElementById('payment-errors').innerText =
+                            "Payment verification failed. Please contact support if money was deducted.";
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('payment-errors').innerText =
+                        "Something went wrong verifying your payment. Please try again.";
+                });
+            },
+            "prefill": {
+                "name": "{{ request.user.get_full_name|default:request.user.username }}",
+                "email": "{{ request.user.email }}"
+            },
+            "theme": {
+                "color": "#8b4d56"
+            },
+            "modal": {
+                "ondismiss": function () {
+                    console.log('Checkout closed without completing payment');
+                }
+            }
+        };
+        var rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+            document.getElementById('payment-errors').innerText =
+                "Payment failed: " + response.error.description;
+        });
+        rzp.open();
+        e.preventDefault();
+    };
 </script>
 {% endblock %}

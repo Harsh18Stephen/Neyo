@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from products.models import Product, ProductVariant
 import uuid
+import time
 
-# Create your models here.
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -46,7 +46,13 @@ class Order(models.Model):
     
     # Payment info
     stripe_payment_intent = models.CharField(max_length=200, blank=True)
-    
+
+    # Razorpay tracking fields
+    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=200, blank=True, null=True)
+    is_paid = models.BooleanField(default=False)
+
     class Meta:
         ordering = ['-created_at']
     
@@ -55,8 +61,6 @@ class Order(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.order_number:
-            # Generate order number
-            import time
             self.order_number = f"NEYO-{int(time.time())}"
         super().save(*args, **kwargs)
     
@@ -66,6 +70,7 @@ class Order(models.Model):
     
     def get_total_items(self):
         return sum(item.quantity for item in self.items.all())
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
