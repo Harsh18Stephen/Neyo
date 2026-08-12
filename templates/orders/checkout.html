@@ -24,7 +24,7 @@
 <section class="checkout-gradient py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
-            <h1 class="text-3xl font-bold mb-4">Secure Checkout</h1>
+            <h1 class="text-3xl text-[#8b4d56] font-bold mb-4">Secure Checkout</h1>
             
             <!-- Progress Steps -->
             <div class="flex items-center justify-center space-x-4 mt-6">
@@ -32,21 +32,21 @@
                     <div class="w-10 h-10 bg-white text-[#8b4d56] rounded-full flex items-center justify-center font-bold shadow-lg">
                         1
                     </div>
-                    <span class="ml-2 font-medium">Cart</span>
+                    <span class="ml-2 font-medium text-[#8b4d56]">Cart</span>
                 </div>
                 <div class="w-16 h-1 bg-white/30"></div>
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center font-bold">
+                    <div class="w-10 h-10 bg-white/30 text-[#8b4d56] rounded-full flex items-center justify-center font-bold">
                         2
                     </div>
-                    <span class="ml-2 font-medium">Address</span>
+                    <span class="ml-2 font-medium text-[#8b4d56]">Address</span>
                 </div>
                 <div class="w-16 h-1 bg-white/30"></div>
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center font-bold">
+                    <div class="w-10 h-10 bg-white/30 text-[#8b4d56] rounded-full flex items-center justify-center font-bold">
                         3
                     </div>
-                    <span class="ml-2 font-medium">Payment</span>
+                    <span class="ml-2 font-medium text-[#8b4d56]">Payment</span>
                 </div>
             </div>
         </div>
@@ -103,9 +103,10 @@
                     </a>
                     
                     <a href="{% url 'orders:checkout_address' %}" 
-                       class="flex-1 checkout-gradient text-white py-3 px-6 rounded-2xl font-semibold text-center hover:shadow-lg transition-all">
-                        Continue to Address
-                        <i class="fas fa-arrow-right ml-2"></i>
+                        class="flex-1 text-white border-2 py-3 px-6 rounded-2xl font-semibold text-center hover:shadow-lg transition-colors"
+                        style="background-color: #8b4d56; border-color: #8b4d56;">
+                            Continue to Address
+                            <i class="fas fa-arrow-right ml-2"></i>
                     </a>
                 </div>
             </div>

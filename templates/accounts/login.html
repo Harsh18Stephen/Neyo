@@ -39,15 +39,18 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-neyo-primary focus:border-transparent transition-colors">
                 </div>
                 
-                <button type="submit" 
-                        class="w-full bg-neyo-primary text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-all transform hover:scale-105 shadow-lg mb-4">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+
+                <button type="submit"
+                        class="w-full bg-[#8b4d56] text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:bg-[#733f47] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login
                 </button>
+
                 
                 <!-- Google Login (placeholder) -->
-                <a href="{% url 'accounts:google_login' %}" 
+                <a href="{% url 'accounts:google_login' %}" style="margin-top: 1rem;"
                    class="w-full flex items-center justify-center bg-white border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-                    <i class="fab fa-google mr-2 text-red-500"></i>Continue with Google
+                    <i class="fab fa-google mr-2 text-red-500"></i> Continue with Google
                 </a>
             </form>
             

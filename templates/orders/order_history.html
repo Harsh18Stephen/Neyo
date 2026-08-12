@@ -6,7 +6,7 @@
 <!-- Header -->
 <section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl font-bold text-white text-center">
+        <h1 class="text-4xl text-[#8b4d56] font-bold  text-center">
             <i class="fas fa-box mr-3"></i>Order History
         </h1>
     </div>
@@ -95,10 +95,10 @@
                     <!-- Order Actions -->
                     <div class="bg-gray-50 px-6 py-4 border-t flex flex-col sm:flex-row gap-3">
                         <a href="{% url 'orders:detail' order.id %}" 
-                           class="flex-1 bg-neyo-primary text-white py-2 px-4 rounded-lg text-center font-semibold hover:bg-gray-800 transition-colors">
-                            <i class="fas fa-eye mr-2"></i>View Details
+                        class="flex-1 bg-[#8b4d56] text-white py-2.5 px-4 rounded-lg text-center font-semibold transition-all duration-300 hover:bg-[#733f47] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0">
+                            <i class="fas fa-eye mr-2"></i>
+                            View Details
                         </a>
-                        
                         <a href="{% url 'orders:invoice' order.id %}" 
                            class="flex-1 bg-white border-2 border-neyo-primary text-neyo-primary py-2 px-4 rounded-lg text-center font-semibold hover:bg-gray-50 transition-colors">
                             <i class="fas fa-file-download mr-2"></i>Invoice

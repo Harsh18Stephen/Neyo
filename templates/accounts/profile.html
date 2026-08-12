@@ -7,8 +7,8 @@
 <section class="bg-gradient-to-r from-neyo-primary to-gray-800 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center text-white">
-            <h1 class="text-4xl font-bold mb-2">My Account</h1>
-            <p class="text-lg text-gray-200">Manage your profile and addresses</p>
+            <h1 class="text-4xl text-[#8b4d56] font-bold mb-2">My Account</h1><br>
+            <p class="text-lg text-[#8b4d56]">Manage your profile and addresses</p>
         </div>
     </div>
 </section>
@@ -22,10 +22,10 @@
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <nav class="space-y-2">
-                        <a href="#profile" class="block px-4 py-3 rounded-lg bg-neyo-primary text-white font-medium">
-                            <i class="fas fa-user mr-2"></i>Profile
+                        <a href="#profile" class="block px-4 py-3 rounded-lg bg-neyo-primary text-[#8b4d56] font-medium">
+                            <i class="fas text-[#8b4d56] fa-user mr-2"></i>Profile
                         </a>
-                        <a href="{% url 'orders:history' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
+                        <a href="{% url 'orders:history' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100 text-[#8b4d56]">
                             <i class="fas fa-box mr-2"></i>Orders
                         </a>
                         <a href="{% url 'accounts:logout' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100 text-red-600">
@@ -83,8 +83,8 @@
                             <i class="fas fa-shipping-fast mr-2"></i>Shipping Addresses
                         </h2>
                         <a href="{% url 'accounts:add_address' %}?type=shipping" 
-                           class="bg-neyo-primary text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
-                            <i class="fas fa-plus mr-2"></i>Add New
+                            class="bg-[#8b4d56] text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-[#733f47] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0">
+                                <i class="fas fa-plus mr-2"></i>Add New
                         </a>
                     </div>
                     
@@ -144,7 +144,7 @@
                             <i class="fas fa-file-invoice mr-2"></i>Billing Addresses
                         </h2>
                         <a href="{% url 'accounts:add_address' %}?type=billing" 
-                           class="bg-neyo-primary text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
+                            class="bg-[#8b4d56] text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-[#733f47] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0">
                             <i class="fas fa-plus mr-2"></i>Add New
                         </a>
                     </div>
@@ -191,8 +191,10 @@
                             <i class="fas fa-file-invoice text-gray-400 text-4xl mb-3"></i>
                             <p class="text-gray-600 mb-4">No billing addresses saved</p>
                             <a href="{% url 'accounts:add_address' %}?type=billing" 
-                               class="inline-block bg-neyo-primary text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors">
-                                Add Billing Address
+
+ class="bg-[#8b4d56] text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-[#733f47] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
+>       
+                               Add Billing Address
                             </a>
                         </div>
                     {% endif %}

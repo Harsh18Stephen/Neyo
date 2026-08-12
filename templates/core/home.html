@@ -166,7 +166,7 @@
                     <h3 class="text-lg font-semibold text-[#8b4d56] mb-2">{{ product.name }}</h3>
                     <p class="text-gray-600 mb-4 line-clamp-2">{{ product.description|truncatewords:15 }}</p>
                     <div class="flex items-center justify-between">
-                        <span class="text-2xl font-bold text-[#a0616a]">${{ product.price }}</span>
+                        <span class="text-2xl font-bold text-[#a0616a]">₹w{{ product.price }}</span>
                         <a href="{% url 'products:detail' product.slug %}"
                             class="inline-flex items-center justify-center bg-[#8b4d56] text-white 
                                     px-4 py-2.5 rounded-xl font-medium text-sm shadow-md
