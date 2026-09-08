@@ -1,1 +1,1 @@
-unicorn neyo.wsgi
+gunicorn neyo.wsgi
