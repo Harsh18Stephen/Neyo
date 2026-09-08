@@ -36,7 +36,7 @@ RAZORPAY_KEY_SECRET = "HhSVwgDk47U1MMamz1TZBYDt"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'neyo.com', 'www.neyo.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'neyonaturals.com', 'www.neyonaturals.com']
 
 # Application definition
 INSTALLED_APPS = [
